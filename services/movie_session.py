@@ -48,9 +48,6 @@ def get_taken_seats(movie_session_id: int) -> list:
     taken_seats = []
     movie_session = MovieSession.objects.get(id=movie_session_id)
     for row in range(1, movie_session.cinema_hall.rows + 1):
-        for seat in range(1,movie_session.cinema_hall.seats_in_row + 1):
+        for seat in range(1, movie_session.cinema_hall.seats_in_row + 1):
             taken_seats.append({"row": row, "seat": seat})
     return taken_seats
-
-
-
