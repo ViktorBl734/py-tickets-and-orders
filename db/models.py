@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from tests.test_main import movie_sessions_data
+# from tests.test_main import movie_sessions_data
 
 
 class Genre(models.Model):
@@ -65,7 +65,7 @@ class Order(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"Order: {self.created_at}"
+        return f"{self.created_at}"
 
 
 class Ticket(models.Model):
@@ -79,9 +79,18 @@ class Ticket(models.Model):
         return f"Ticket: {self.movie_session.movie.title} {self.movie_session.show_time} (row: {self.row}, seat: {self.seat})"
 
     def clean(self) -> None:
-        if 1 <= self.row <= self.movie_session.cinema_hall.rows and 1 <= self.seat <= self.movie_session.cinema_hall.seats_in_row:
-            return
-        raise ValidationError
+        if not (1 <= self.row <= self.movie_session.cinema_hall.rows):
+            raise ValidationError({
+                'row': [f'row number must be in available range: (1, rows): '
+                        f'(1, {self.movie_session.cinema_hall.rows})']
+            })
+
+        if not (1 <= self.seat <= self.movie_session.cinema_hall.seats_in_row):
+            raise ValidationError({
+                'seat': [
+                    f'seat number must be in available range: (1, seats_in_row): '
+                    f'(1, {self.movie_session.cinema_hall.seats_in_row})']
+            })
 
     def save(self, *args, **kwargs) -> None:
         self.clean()
