@@ -57,7 +57,7 @@ class MovieSession(models.Model):
 
 
 class User(AbstractUser):
-    first_name = models.CharField(max_length=80, blank=True, null=True)
+    pass
 
 
 class Order(models.Model):
