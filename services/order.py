@@ -19,7 +19,12 @@ def create_order(tickets: list, username: str, date: str = None) -> None:
                                   row=ticket["row"], seat=ticket["seat"])
 
 
-def get_orders(username: str = None) -> QuerySet:
+# def get_orders(username: str = None) -> QuerySet:
+#     orders = Order.objects.all()
+#     if username:
+#         orders = orders.filter(user__username=username)
+#     return orders.order_by("created_at", "user__username")
+def get_orders(username: str = None) -> QuerySet[Order]:
     orders = Order.objects.all()
     if username:
         orders = orders.filter(user__username=username)
