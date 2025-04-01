@@ -3,9 +3,14 @@ from db.models import User
 
 def create_user(username: str, password: str, email: str = None,
                 first_name: str = None, last_name: str = None) -> User:
-    User.objects.create_user(username=username, password=password,
-                             email=email, first_name=first_name,
-                             last_name=last_name)
+    us = User.objects.create_user(username=username, password=password,
+                             email=email)
+    if first_name is not None:
+        us.first_name = first_name
+        us.save()
+    if last_name is not None:
+        us.last_name = last_name
+        us.save()
     # if email:
     #     us.email = email
     # if first_name:
